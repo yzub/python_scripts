@@ -20,7 +20,6 @@ def main():
     # Config parsers
     splitsong_parser(subparser)
 
-
     args = parser.parse_args()
 
     # Set the verbose level

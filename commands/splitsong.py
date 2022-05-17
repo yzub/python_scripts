@@ -12,22 +12,26 @@ def splitsong_parser(subparser):
     """
     cmd_parser = subparser.add_parser(
         "splitsong",
-        help="Script to download and demucs a song."
+        help="Script to download and demucs song(s)."
     )
 
-    cmd_parser.add_argument("-s", "--song_link", help="Song link.", type=str,
-                            required=True)
+    cmd_parser.add_argument("-s", "--song_links", type=str, default=None,
+                            help="Comma separated string containing song links.")
     cmd_parser.set_defaults(func=splitsong)
 
 
 def splitsong(args):
+    input = args.song_links
 
-    song_link = args.song_link
+    if input:
+        songs_list = input.split(",")
 
-    os.system(f'spotdl {song_link}')
+        for song_url in songs_list:
+            os.system(f'spotdl {song_url}')
+
     mp3_files = get_file_names()
 
-    print ("Files found:")
+    print("Files found:")
     for file in mp3_files:
         print(file)
 
@@ -37,6 +41,6 @@ def splitsong(args):
         shutil.move(file, f'data/{file}')
         print(f'{file} moved to data/')
 
+
 def get_file_names():
-    mylist = [f for f in glob.glob("*.mp3")]
-    return mylist
+    return [f for f in glob.glob("*.mp3")]
